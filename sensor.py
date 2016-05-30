@@ -1,13 +1,12 @@
 import serial
-import picamera
+from picamera import PiCamera
 
 class USBDevice():
     def __init__(self, tag):
         import re
         import subprocess
         device_re = re.compile("Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
-        df = subprocess.check_output("lsusb", shell = True)
-        df = df.decode('utf-8') #were using python3
+        df = subprocess.check_output("lsusb", shell = True).decode('utf-8')
         for i in df.split("\n"):
             info = device_re.match(i)
             if info:
@@ -26,18 +25,18 @@ class GeigerCounter(USBDevice):
         data = port.read(sample_time * self.BAUDRATE)
         return "".join(bin(i)[2:] for i in data).count("1") / sample_time
 
-class CameraWrapper:
-	def __init__(self):
-		self.numPicsTaken=0
-		self.numVidsTaken=0
-		self.camera=picamera.PiCamera()
-	def takePic():
-		self.camera.capture('image'+str(numPicsTaken)+'.jpg')
-		self.numPicsTaken+=1
-	def startVid():
-		self.camera.start_recording('video'+str(numVidsTaken)+'.h264')
-		self.numVidsTaken+=1
-	def stopVid():
-		self.camera.stopRecording()
+class CameraWrapper(PiCamera):
+    def __init__(self):
+        self.pictures_taken = 0
+        self.videos_taken = 0
+        super(CameraWrapper, self).__init__()
+            
+    def capture(self):
+        super(CameraWrapper, self).capture('image' + str(pictures_taken) + '.jpg')
+        self.pictures_taken += 1
+            
+    def start_recording():
+        super(CameraWrapper, self).start_recording('video' + str(videos_taken) + '.h264')
+        self.videos_taken += 1
 
 
