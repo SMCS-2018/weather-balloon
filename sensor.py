@@ -2,7 +2,7 @@ import serial
 from picamera import PiCamera
 
 class USBDevice():
-    def __init__(self, tag):
+    def __init__(self: USBDevice, tag: str):
         import re
         import subprocess
         device_re = re.compile("Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
@@ -17,26 +17,24 @@ class USBDevice():
                     break
 
 class GeigerCounter(USBDevice):
-    def __init__(self, tag):
+    def __init__(self: GeigerCounter, tag: str):
         self.BAUDRATE = 9600
         super(GeigerCounter, self).__init__(tag)
 
-    def read_rate(self, sample_time):
+    def read_rate(self: GeigerCounter, sample_time: int):
         data = port.read(sample_time * self.BAUDRATE)
         return "".join(bin(i)[2:] for i in data).count("1") / sample_time
 
 class CameraWrapper(PiCamera):
-    def __init__(self):
+    def __init__(self: CameraWrapper):
         self.pictures_taken = 0
         self.videos_taken = 0
         super(CameraWrapper, self).__init__()
             
-    def capture(self):
+    def capture(self: CameraWrapper):
         super(CameraWrapper, self).capture('image' + str(pictures_taken) + '.jpg')
         self.pictures_taken += 1
             
-    def start_recording():
+    def start_recording(self: CameraWrapper):
         super(CameraWrapper, self).start_recording('video' + str(videos_taken) + '.h264')
         self.videos_taken += 1
-
-
