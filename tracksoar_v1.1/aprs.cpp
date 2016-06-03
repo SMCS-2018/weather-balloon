@@ -99,7 +99,7 @@ void aprs_send()
   ax25_flush_frame();                 // Tell the modem to go
 }
 
-void aprs_send_extended(byte[16] extra)
+void aprs_send_extended(byte extra[16])
 {
   char temp[12];                   // Temperature (int/ext)
   const struct s_address addresses[] = { 
@@ -144,7 +144,7 @@ void aprs_send_extended(byte[16] extra)
   dtostrf(sensors_temperature(), -1, 2, temp);
   ax25_send_string(temp);
 
-  ax25_send_strint("/Extra="); //send the extra 16 bytes
+  ax25_send_string("/Extra="); //send the extra 16 bytes
   for (int i=0;i<16;i++) {
     ax25_send_byte(extra[i]);
   }
