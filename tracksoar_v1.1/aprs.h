@@ -17,7 +17,8 @@
 
 #ifndef __APRS_H__
 #define __APRS_H__
+#define byte uint8_t
 
 void aprs_send();
-
+void aprs_send_extended(byte data[16]);
 #endif
