@@ -44,11 +44,11 @@ class CameraWrapper(PiCamera):
         self.pictures_taken = 0
         self.videos_taken = 0
         super(CameraWrapper, self).__init__()
-            
+
     def capture(self):
         super(CameraWrapper, self).capture('out/image' + str(self.pictures_taken) + '.jpg')
         self.pictures_taken += 1
-            
+
     def start_recording(self):
-        super(CameraWrapper, self).start_recording('out/video' + str(self.videos_taken) + '.h264')
+        super(CameraWrapper, self).start_recording('out/video' + str(self.videos_taken) + '.mp4')
         self.videos_taken += 1
