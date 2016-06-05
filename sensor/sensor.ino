@@ -24,9 +24,9 @@ int whatToSend;
 bool bnoFound = true;
 
 void setup(){
-    Serial.begin(28800);
+    Serial.begin(9600);
     if (!bno.begin()) {
-        Serial.println("HELP, SOMETHING HAPPENED");
+        Serial.println("No 9DOF found.");
         bnoFound = false;
     }
     pinMode(CURRENT_SENSOR_PIN, INPUT);
@@ -54,49 +54,49 @@ void loop() {
             if(bnoFound) {
                 writeVector(bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE));
             } else {
-                Serial.println("BNO055 NOT FOUND");
+                Serial.println("GYRO NOT FOUND");
             }
             break;
         case ACCEL:
             if(bnoFound) {
                 writeVector(bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER));
             } else {
-                Serial.println("BNO055 NOT FOUND");
+                Serial.println("ACCEL NOT FOUND");
             }
             break;
         case MAGNET:
             if(bnoFound) {
                 writeVector(bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER));
             } else {
-                Serial.println("BNO055 NOT FOUND");
+                Serial.println("MAGNET NOT FOUND");
             }
             break;
         case EULERVEC:
             if(bnoFound) {
                 writeVector(bno.getVector(Adafruit_BNO055::VECTOR_EULER));
             } else {
-                Serial.println("BNO055 NOT FOUND");
+                Serial.println("EULERVEC NOT FOUND");
             }
             break;
         case LINACCEL:
             if(bnoFound) {
                 writeVector(bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL));
             } else {
-                Serial.println("BNO055 NOT FOUND");
+                Serial.println("LINACCEL NOT FOUND");
             }
             break;
         case GRAVITY:
             if(bnoFound) {
                 writeVector(bno.getVector(Adafruit_BNO055::VECTOR_GRAVITY));
             } else {
-                Serial.println("BNO055 NOT FOUND");
+                Serial.println("GRAVITY NOT FOUND");
             }
             break;
         case TEMP:
             if(bnoFound) {
                 Serial.println(bno.getTemp());
             } else {
-                Serial.println("BNO055 NOT FOUND");
+                Serial.println("TEMP NOT FOUND");
             }
             break;
         case CURRENT:
