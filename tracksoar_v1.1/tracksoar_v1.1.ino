@@ -69,6 +69,8 @@ static int32_t next_aprs = 0;
 
 void setup()
 {
+  Wire.begin(8);                // join i2c bus with address #8
+  Wire.onReceive(receiveEvent); // register event
   Serial.begin(9600);
   pinMode(LED_PIN, OUTPUT);
   pin_write(LED_PIN, LOW);
@@ -138,9 +140,9 @@ void loop()
 {
   // Time for another APRS frame
   if ((int32_t) (millis() - next_aprs) >= 0) {
-    while (Serial.available() > 0) { // I changed this to read what extra stuff to send
-      dataToSend.push(Serial.read());
-    }
+//    while (Serial.available() > 0) { // I changed this to read what extra stuff to send
+//      dataToSend.push(Serial.read());
+//    }
     get_pos();
     if (dataToSend.count()>=16) {
       byte[16] data;
@@ -163,4 +165,10 @@ void loop()
   }
 
   power_save(); // Incoming GPS data or interrupts will wake us up
+}
+
+void receiveEvent(int howMany) {
+  while (0 < Wire.available()) { // loop through all
+    dataToSend.push(Wire.read()); // receive byte as a character
+  }
 }
