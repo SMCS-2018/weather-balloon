@@ -1,9 +1,13 @@
+#include <Adafruit_BME280.h>
+
 #include <Wire.h>
 #include <Adafruit_BNO055.h>
 #include <Adafruit_Sensor.h>
 #include <utility/imumaths.h>
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
+Adafruit_BME280 bme; // I2C
+
 const int CURRENT_SENSOR_PIN = 0;
 const int UV_SENSOR_PIN = 0;
 const int DUST_SENSOR_PIN = 0;
@@ -18,16 +22,24 @@ const int CURRENT = 6;
 const int UV = 7;
 const int DUST = 8;
 const int TEMP = 9;
+const int OUTTEMP = 10;
+const int OUTHUM = 11;
+const int OUTPRESS = 12;
 
 
 int whatToSend;
 bool bnoFound = true;
+bool bmeFound = true;
 
 void setup(){
     Serial.begin(9600);
     if (!bno.begin()) {
         Serial.println("No 9DOF found.");
         bnoFound = false;
+    }
+    if(!bme.begin()) {
+        Serial.println("Could not find a valid BME280 sensor, check wiring!");
+        bmeFound = false;
     }
     pinMode(CURRENT_SENSOR_PIN, INPUT);
     pinMode(UV_SENSOR_PIN, INPUT);
@@ -107,6 +119,15 @@ void loop() {
             break;
         case DUST:
             writeAnalogPin(DUST_SENSOR_PIN);
+            break;
+        case OUTTEMP:
+            Serial.println(bme.readTemperature());
+            break;
+        case OUTPRESS:
+            Serial.println(bme.readPressure());
+            break;
+        case OUTHUM:
+            Serial.println(bme.readHumidity());
             break;
         default:
             Serial.println("INVALID");
