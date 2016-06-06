@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-// Mpide 22 fails to compile Arduino code because it stupidly defines ARDUINO 
+// Mpide 22 fails to compile Arduino code because it stupidly defines ARDUINO
 // as an empty macro (hence the +0 hack). UNO32 builds are fine. Just use the
 // real Arduino IDE for Arduino builds. Optionally complain to the Mpide
 // authors to fix the broken macro.
@@ -23,7 +23,7 @@
 #error "Oops! We need the real Arduino IDE (version 22 or 23) for Arduino builds."
 #error "See trackuino.pde for details on this"
 
-// Refuse to compile on arduino version 21 or lower. 22 includes an 
+// Refuse to compile on arduino version 21 or lower. 22 includes an
 // optimization of the USART code that is critical for real-time operation
 // of the AVR code.
 #elif (ARDUINO + 0) < 22
@@ -106,13 +106,13 @@ void setup()
       while (! Serial.available())
         power_save();
     } while (! gps_decode(Serial.read()));
-    
+
     next_aprs = millis() + 1000 *
       (APRS_PERIOD - (gps_seconds + APRS_PERIOD - APRS_SLOT) % APRS_PERIOD);
   }
   else {
     next_aprs = millis();
-  }  
+  }
   // TODO: beep while we get a fix, maybe indicating the number of
   // visible satellites by a series of short beeps?
 }
@@ -168,7 +168,7 @@ void loop()
 }
 
 void receiveEvent(int howMany) {
-  while (0 < Wire.available()) { // loop through all
+  while (Wire.available()) { // loop through all
     dataToSend.push(Wire.read()); // receive byte as a character
   }
 }

@@ -10,7 +10,8 @@ Adafruit_BME280 bme; // I2C
 
 const int CURRENT_SENSOR_PIN = 0;
 const int UV_SENSOR_PIN = 0;
-const int DUST_SENSOR_PIN = 0;
+const int DUST_SENSOR_PIN = A0;
+const int DUST_SENSOR_LED = 11;
 
 const int GYRO = 0;
 const int ACCEL = 1;
@@ -31,8 +32,17 @@ int whatToSend;
 bool bnoFound = true;
 bool bmeFound = true;
 
+int samplingTime = 280;
+int deltaTime = 40;
+int sleepTime = 9680;
+
+int voMeasured = 0;
+float calcVoltage = 0;
+float dustDensity = 0;
+
+
 void setup(){
-    Serial.begin(9600);
+    Serial.begin(250000);
     if (!bno.begin()) {
         Serial.println("No 9DOF found.");
         bnoFound = false;
@@ -41,15 +51,16 @@ void setup(){
         Serial.println("Could not find a valid BME280 sensor, check wiring!");
         bmeFound = false;
     }
+    pinMode(DUST_SENSOR_LED, OUTPUT);
     pinMode(CURRENT_SENSOR_PIN, INPUT);
     pinMode(UV_SENSOR_PIN, INPUT);
 }
 
 void writeVector(imu::Vector<3> vec) {
     Serial.print(vec.x());
-    Serial.print(",");
+    Serial.print(" ");
     Serial.print(vec.y());
-    Serial.print(",");
+    Serial.print(" ");
     Serial.print(vec.z());
     Serial.println();
 }
@@ -118,19 +129,40 @@ void loop() {
             writeAnalogPin(UV_SENSOR_PIN);
             break;
         case DUST:
-            writeAnalogPin(DUST_SENSOR_PIN);
+            digitalWrite(DUST_SENSOR_LED, LOW); // power on the LED
+            delayMicroseconds(samplingTime);
+            voMeasured = analogRead(DUST_SENSOR_PIN); // read the dust value
+            delayMicroseconds(deltaTime);
+            digitalWrite(DUST_SENSOR_LED, HIGH); // turn the LED off
+            Serial.println(voMeasured);
             break;
         case OUTTEMP:
-            Serial.println(bme.readTemperature());
+            if(bmeFound) {
+                Serial.println(bme.readTemperature());
+            } else {
+                Serial.println("NO TEMP FOUND");
+            }
             break;
         case OUTPRESS:
-            Serial.println(bme.readPressure());
+            if(bmeFound) {
+                Serial.println(bme.readPressure());
+            } else {
+                Serial.println("NO PRESSURE FOUND");
+            }
             break;
         case OUTHUM:
-            Serial.println(bme.readHumidity());
+            if(bmeFound) {
+                Serial.println(bme.readHumidity());
+            } else {
+                Serial.println("NO HUMIDITY FOUND");
+            }
             break;
         default:
-            Serial.println("INVALID");
+            if(bmeFound) {
+                Serial.println("INVALID");
+            } else {
+                Serial.println();
+            }
             break;
     }
 }
