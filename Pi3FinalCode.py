@@ -14,14 +14,17 @@ while arduino == None:
         arduino = None
 
 arduino.timeout = 5
-arduino.readline()
-arduino.readline()
+try:
+    arduino.readline()
+    arduino.readline()
+except Exception:
+    print("Excepted")
 
 @timeout(10)
 def get9DofData():
     with open('out/gyro.csv', 'a') as gyroFile:
-        arduino.reset_input_buffer()
-        arduino.reset_output_buffer()
+        arduino.flushInput()
+        arduino.flushOutput()
         gyroFile.write(str(time.time()) + ',')
         for i in range(6):
             arduino.write(str(i).encode('utf-8'))
@@ -33,8 +36,8 @@ def get9DofData():
 @timeout(5)
 def getOutsideData():
     with open('out/outside.csv', 'a') as gyroFile:
-        arduino.reset_input_buffer()
-        arduino.reset_output_buffer()
+        arduino.flushInput()
+        arduino.flushOutput()
         gyroFile.write(str(time.time()) + ',')
         for i in range(10, 13):
             arduino.write(str(i).encode('utf-8'))
@@ -44,8 +47,8 @@ def getOutsideData():
 @timeout(5)
 def getCurrentData():
     with open('out/current.csv', 'a') as gyroFile:
-        arduino.reset_input_buffer()
-        arduino.reset_output_buffer()
+        arduino.flushInput()
+        arduino.flushOutput()
         gyroFile.write(str(time.time()) + ',')
         arduino.write("6".encode('utf-8'))
         gyroFile.write(arduino.readline().decode('utf-8').strip() + ',')
@@ -54,8 +57,8 @@ def getCurrentData():
 @timeout(5)
 def getUvData():
     with open('out/uv.csv', 'a') as gyroFile:
-        arduino.reset_input_buffer()
-        arduino.reset_output_buffer()
+        arduino.flushInput()
+        arduino.flushOutput()
         gyroFile.write(str(time.time()) + ',')
         arduino.write("7".encode('utf-8'))
         gyroFile.write(arduino.readline().decode('utf-8').strip() + ',')
