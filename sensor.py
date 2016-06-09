@@ -39,16 +39,16 @@ class USBCommunicator(USBDevice):
     def recieve_message():
         return self.port.read(PACKET_SIZE)
 
-# class CameraWrapper(PiCamera):
-#     def __init__(self):
-#         self.pictures_taken = 0
-#         self.videos_taken = 0
-#         super(CameraWrapper, self).__init__()
-#
-#     def capture(self):
-#         super(CameraWrapper, self).capture('out/image' + str(self.pictures_taken) + '.jpg')
-#         self.pictures_taken += 1
-#
-#     def start_recording(self):
-#         super(CameraWrapper, self).start_recording('out/video' + str(self.videos_taken) + '.mp4')
-#         self.videos_taken += 1
+class CameraWrapper(PiCamera):
+    def __init__(self):
+        self.pictures_taken = 0
+        self.videos_taken = 0
+        super(CameraWrapper, self).__init__()
+
+    def capture(self):
+        super(CameraWrapper, self).capture('out/image' + str(self.pictures_taken) + '.jpg')
+        self.pictures_taken += 1
+
+    def start_recording(self):
+        super(CameraWrapper, self).start_recording('out/video' + str(self.videos_taken) + '.mp4')
+        self.videos_taken += 1

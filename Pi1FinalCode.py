@@ -5,8 +5,6 @@ import serial
 from timeout import timeout
 import time
 
-cam = sensor.CameraWrapper()
-
 arduino = None
 while arduino == None:
     try:
@@ -72,7 +70,6 @@ def getUvData():
 
 @timeout(5)
 def getGeigerCounterData():
-    uselessvariable=0
     with open('out/geiger.csv', 'a') as gyroFile:
         lineToWrite = ""
         lineToWrite += str(time.time()) + ','
@@ -89,8 +86,7 @@ nextTime = currentTime + 15
 while True:
     while time.time() < nextTime:
         pass
-    outside = getOutsideData()
-    uv = getUvData()
+    dof = get9DofData()
     cam.stop_recording()
     cam.capture()
     cam.start_recording()

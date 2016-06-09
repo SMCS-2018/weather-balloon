@@ -42,7 +42,7 @@ float dustDensity = 0;
 
 
 void setup(){
-    Serial.begin(57600);
+    Serial.begin(9600);
     if (!bno.begin()) {
         Serial.println("No 9DOF found.");
         bnoFound = false;
